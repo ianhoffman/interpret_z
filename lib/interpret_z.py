@@ -1,3 +1,4 @@
+from lib import ast_z
 from lib.const_z import TypesZ
 
 class NodeVisitor:
@@ -17,6 +18,12 @@ class InterpreterZ(NodeVisitor):
     def __init__(self, ast, context=None):
         self.ast = ast
         self.context = context or {} 
+
+    def visit_ArrayNode(self, node):
+        arr = []
+        for child in node.arr:
+            arr.append(self.visit(child))
+        return arr
     
     def visit_AssignmentNode(self, node):
         self.context[node.name] = self.visit(node.value)
@@ -79,6 +86,13 @@ class InterpreterZ(NodeVisitor):
             else:
                 visited_children.append(str(res))
         return ''.join(visited_children)
+
+    def visit_DotNode(self, node):
+        var = self.visit(node.var)
+        while type(node.prop) is ast_z.DotNode:
+            node = node.prop
+            var = var[node.var.name]
+        return var[node.prop.name]
 
     def visit_ForLoopNode(self, node):
         result = []

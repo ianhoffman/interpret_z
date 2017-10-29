@@ -55,10 +55,8 @@ class ParserZ:
     def for_loop(self):
         self.eat(ReservedKeywords.FORLOOP)
         arr = self.var()
-        self.eat(TypesZ.VAR)
         self.eat(ReservedKeywords.AS)
         var = self.var() 
-        self.eat(TypesZ.VAR)
         self.eat(TypesZ.RBRACE)
         block = self.compound()
         self.eat(TypesZ.LBRACE)
@@ -73,11 +71,25 @@ class ParserZ:
         token = self.current_token
         self.eat(TypesZ.VAR)
         self.eat(TypesZ.EQ)
-        value = self.ternary_statement()
+        if self.current_token == TypesZ.LBRACKET:
+            value = self.array()
+        else: 
+            value = self.ternary_statement()
         return ast_z.AssignmentNode(
             name=token.value,
             value=value
         )
+
+    def array(self):
+        arr = []
+        self.eat(TypesZ.LBRACKET)
+        if self.current_token != TypesZ.RBRACKET:
+            arr.append(self.ternary_statement())
+            while self.current_token == TypesZ.COMMA:
+                self.eat(TypesZ.COMMA)
+                arr.append(self.ternary_statement())
+        self.eat(TypesZ.RBRACKET)
+        return ast_z.ArrayNode(arr=arr)
 
     def if_statement(self):
         self.eat(ReservedKeywords.IF)
@@ -178,7 +190,18 @@ class ParserZ:
         return node
 
     def var(self):
-        return ast_z.VarNode(name=self.current_token.value)
+        node = ast_z.VarNode(name=self.current_token.value)
+        self.eat(TypesZ.VAR)
+        while self.current_token == TypesZ.DOT:
+            self.eat(TypesZ.DOT)
+            node = ast_z.DotNode(
+                var=node,
+                prop=self.var()
+            )
+        return node
+
+    def func(self):
+        pass
 
     def factor(self):
         node = None
@@ -202,7 +225,9 @@ class ParserZ:
             self.eat(TypesZ.STRING)
         elif self.current_token == TypesZ.VAR:
             node = self.var()
-            self.eat(TypesZ.VAR)
+        elif self.current_token == TypesZ.FUNC:
+            node = self.func()
+            self.eat(TypesZ.FUNC)
         return node
 
     def parse(self):

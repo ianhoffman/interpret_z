@@ -4,8 +4,11 @@ from lib.token_z import TokenZ
 
 
 ZephyrFuncs = {
-    'replace'
+    'replace': print
 }
+
+def replace(full_str, to_replace, replacement):
+    return full_str.replace(to_replace, replacement)
 
 class TypesZ(Enum):
     AND = 'AND'
@@ -16,7 +19,7 @@ class TypesZ(Enum):
     DOT = 'DOT'
     EQ = 'EQ'
     EQEQ = 'EQEQ'
-    FUNCTION = 'FUNCTION'
+    FUNC = 'FUNC'
     GT = 'GT'
     GTE = 'GTE'
     HTML_OR_TEXT = 'HTML_OR_TEXT'

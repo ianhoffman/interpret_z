@@ -1,3 +1,7 @@
+class ArrayNode:
+    def __init__(self, arr):
+        self.arr = arr
+
 class AssignmentNode:
     def __init__(self, name, value):
         self.name = name
@@ -6,6 +10,11 @@ class AssignmentNode:
 class CompoundNode:
     def __init__(self, children):
         self.children = children
+
+class DotNode:
+    def __init__(self, var, prop):
+        self.var = var
+        self.prop = prop
 
 class ForLoopNode:
     def __init__(self, arr, var, block):

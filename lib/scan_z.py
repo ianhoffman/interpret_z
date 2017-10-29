@@ -68,7 +68,7 @@ class ScannerZ:
             result += self.current_char
             self.advance()
         if result in ZephyrFuncs:
-            return TokenZ(TypesZ.FUNCTION, result)
+            return TokenZ(TypesZ.FUNC, result)
         else:
             return ReservedKeywords.as_dict().get(result, TokenZ(TypesZ.VAR, result))
 

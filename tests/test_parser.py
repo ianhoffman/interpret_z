@@ -157,5 +157,32 @@ class ParserTestCase(unittest.TestCase):
             context=context
         )
 
+    def test_arrays(self):
+        self._assert_all_equal(
+            (
+                (
+                    'x = [1, 2, 3, 4]}'
+                    '{foreach x as i}{i}{/foreach',
+                    1234
+                ),
+            )
+        )
+
+    def test_dot_notation(self):
+        self._assert_all_equal(
+            (
+                ('x.id', 1),
+                ('x.y.val', 3)
+            ),
+            context={
+                'x': {
+                    'id': 1,
+                    'y': {
+                        'val': 3
+                    }
+                }
+            }
+        )
+
 if __name__ == '__main__':
     unittest.main()

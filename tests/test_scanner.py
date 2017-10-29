@@ -143,7 +143,7 @@ class ScannerZTestCase(unittest.TestCase):
             'TokenZ(GT, >)',
             'TokenZ(INTEGER, 3)',
             'TokenZ(QUESTION, ?)',
-            'TokenZ(FUNCTION, replace)',
+            'TokenZ(FUNC, replace)',
             'TokenZ(LPAREN, ()',
             'TokenZ(VAR, st_product)',
             'TokenZ(LBRACKET, [)',

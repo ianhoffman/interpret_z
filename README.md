@@ -12,7 +12,7 @@ KNOWN ISSUES:
 ```
 
 If you are going to use this interpreter, just avoid these sorts of statements.
-Given the limited nature of the sort of programming people tend to do in 
+Given the limited nature of the programming people tend to do in 
 Zephyr, it shouldn't be hard.
 
 For more examples of this bug, see `test_boolean_statements` in `tests/test_interpreter.py`.
