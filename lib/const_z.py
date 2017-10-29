@@ -50,6 +50,7 @@ class TypesZ(Enum):
 
 
 class ReservedKeywords(Enum):
+    AS = 'as'
     ELSE = 'else'
     ENDFOR = '/foreach'
     ENDIF = '/if'

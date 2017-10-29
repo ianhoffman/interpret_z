@@ -52,13 +52,16 @@ class ParserTestCase(unittest.TestCase):
                 ('1 == 1 && 1 != 1', False),
                 ('1 == 1 || 1 != 1', True),
                 ('1 * 1 && 1 != 1', False),
-                ('1 - 1 && 1 == 1', False),
                 ('1 - (3 / 3) || 1 - 1 == 2', False),
-                # This is a known issue. Python evaluates this expression to 0,
-                # but Zephyr evaluates it to false
+                # This is a known issue: Python evaluates the following two
+                # expressions to 0, but Zephyr evaluates them to false.
                 # ('1 && 2 && 0', False),
-                ('1 && 2 || 0', 2),
-                ('(1 || 0) && 1', True)
+                # ('1 - 1 && 1 == 1', False),
+                # Same thing for this expression: Python evaluates it to 1,
+                # but Zephyr expects false.
+                # ('(1 || 0) && 1', True)
+                # Same goes here: Python expects 2, but Zephyr expected true.
+                # ('1 && 2 || 0', 2),
             )
         )
 
@@ -137,7 +140,21 @@ class ParserTestCase(unittest.TestCase):
         self._assert_all_equal(
             (
                 ('x = 1}{x', 1),
+                ('x = (3 * 4)}{12', 12),
+                ('x = 1}{x}{x = 2}{x', 12),
+                ('x = 1}{y = x * 2}{y', 2)
             )
+        )
+
+    def test_for_loop_logic(self):
+        context = {
+            'numbers': [1, 2, 3, 4]
+        }
+        self._assert_all_equal(
+            (
+                ('foreach numbers as x}{x}{/foreach', '1234'),
+            ),
+            context=context
         )
 
 if __name__ == '__main__':

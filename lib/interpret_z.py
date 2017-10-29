@@ -80,6 +80,13 @@ class InterpreterZ(NodeVisitor):
                 visited_children.append(str(res))
         return ''.join(visited_children)
 
+    def visit_ForLoopNode(self, node):
+        result = []
+        for item in self.visit(node.arr):
+            self.context[node.var.name] = item
+            result.append(self.visit(node.block))
+        return ''.join(result)
+
     def visit_IfNode(self, node):
         if self.visit(node.condition):
             return self.visit(node.if_true)

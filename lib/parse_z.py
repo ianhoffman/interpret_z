@@ -30,7 +30,9 @@ class ParserZ:
 
     def compound(self):
         children = []
-        while self.current_token == TypesZ.LBRACE:
+        while self.current_token == TypesZ.LBRACE and self.peek() not in (
+            ReservedKeywords.ENDFOR,
+        ):
             children.append(self.zephyr())
         return ast_z.CompoundNode(children=children)
     
@@ -43,10 +45,29 @@ class ParserZ:
     def statement(self):
         if self.current_token == ReservedKeywords.IF:
             return self.if_statement()
+        elif self.current_token == ReservedKeywords.FORLOOP:
+            return self.for_loop()
         elif self.current_token == TypesZ.VAR and self.peek() == TypesZ.EQ:
             return self.assignment_statement()
         else:
             return self.ternary_statement()
+
+    def for_loop(self):
+        self.eat(ReservedKeywords.FORLOOP)
+        arr = self.var()
+        self.eat(TypesZ.VAR)
+        self.eat(ReservedKeywords.AS)
+        var = self.var() 
+        self.eat(TypesZ.VAR)
+        self.eat(TypesZ.RBRACE)
+        block = self.compound()
+        self.eat(TypesZ.LBRACE)
+        self.eat(ReservedKeywords.ENDFOR)
+        return ast_z.ForLoopNode(
+            arr=arr,
+            var=var,
+            block=block
+        )
 
     def assignment_statement(self):
         token = self.current_token

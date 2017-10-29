@@ -7,6 +7,12 @@ class CompoundNode:
     def __init__(self, children):
         self.children = children
 
+class ForLoopNode:
+    def __init__(self, arr, var, block):
+        self.arr = arr
+        self.var = var
+        self.block = block
+
 class IntegerNode:
     def __init__(self, token):
         self.value = token.value
