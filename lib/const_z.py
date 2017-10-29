@@ -3,12 +3,19 @@ from enum import Enum
 from lib.token_z import TokenZ
 
 
-ZephyrFuncs = {
-    'replace': print
-}
-
 def replace(full_str, to_replace, replacement):
     return full_str.replace(to_replace, replacement)
+
+def number(num, places=0):
+    import pdb; pdb.set_trace()
+    return ('{:.%sf}' % places).format(num) 
+
+
+ZephyrFuncs = {
+    'number': number,
+    'replace': replace 
+}
+
 
 class TypesZ(Enum):
     AND = 'AND'

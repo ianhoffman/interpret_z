@@ -42,6 +42,16 @@ class BoolOpNode:
         self.op = op
         self.right = right
 
+class SubscriptNode:
+    def __init__(self, var, idx):
+        self.var = var
+        self.idx = idx
+
+class FuncNode:
+    def __init__(self, func, args):
+        self.func = func
+        self.args = args
+
 class BoolStatementNode:
     def __init__(self, left, op, right):
         self.left = left

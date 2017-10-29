@@ -1,4 +1,5 @@
 from lib import ast_z
+from lib.const_z import ZephyrFuncs
 from lib.const_z import TypesZ
 
 class NodeVisitor:
@@ -92,7 +93,7 @@ class InterpreterZ(NodeVisitor):
         while type(node.prop) is ast_z.DotNode:
             node = node.prop
             var = var[node.var.name]
-        return var[node.prop.name]
+        return var[node.prop]
 
     def visit_ForLoopNode(self, node):
         result = []
@@ -100,6 +101,13 @@ class InterpreterZ(NodeVisitor):
             self.context[node.var.name] = item
             result.append(self.visit(node.block))
         return ''.join(result)
+
+    def visit_FuncNode(self, node):
+        args = []
+        func = ZephyrFuncs[node.func]
+        for arg in node.args:
+            args.append(self.visit(arg))
+        return func(*args)
 
     def visit_IfNode(self, node):
         if self.visit(node.condition):
@@ -116,6 +124,9 @@ class InterpreterZ(NodeVisitor):
     def visit_StringNode(self, node):
         return node.value
 
+    def visit_SubscriptNode(self, node):
+        return self.visit(node.var)[self.visit(node.idx)]
+
     def visit_TernaryNode(self, node):
         if self.visit(node.condition):
             return self.visit(node.if_true)
@@ -124,7 +135,7 @@ class InterpreterZ(NodeVisitor):
 
     def visit_VarNode(self, node):
         value = self.context.get(node.name)
-        if not value:
+        if value is None:
             raise Exception('Var %s referenced before assignment' % node.name)
         return value 
 

@@ -184,5 +184,28 @@ class ParserTestCase(unittest.TestCase):
             }
         )
 
+    def test_subscripts(self):
+        self._assert_all_equal(
+            (
+                ('x[0]', 1),
+                ('x[1]', 2),
+                ('x[2].id', 12),
+                ('y.var[0]', 20),
+                ('z = 0}{x[z]', 1),
+            ),
+            context={
+                'x': [1, 2, {'id': 12}],
+                'y': {'var': [20]}
+            }
+        )
+
+    def test_functions(self):
+        self._assert_all_equal(
+            (
+                ("replace('hi there', 'hi', 'hello')", 'hello there'),
+                # ('number(12, 2)', 12.00)
+            )
+        )
+
 if __name__ == '__main__':
     unittest.main()

@@ -192,17 +192,42 @@ class ParserZ:
     def var(self):
         node = ast_z.VarNode(name=self.current_token.value)
         self.eat(TypesZ.VAR)
-        while self.current_token == TypesZ.DOT:
-            self.eat(TypesZ.DOT)
-            node = ast_z.DotNode(
-                var=node,
-                prop=self.var()
-            )
+        while self.current_token in (
+            TypesZ.DOT, TypesZ.LBRACKET
+        ):
+            if self.current_token == TypesZ.DOT:
+                self.eat(TypesZ.DOT)
+                node = ast_z.DotNode(
+                    var=node,
+                    prop=self.current_token.value
+                )
+                self.eat(TypesZ.VAR)
+            else:
+                self.eat(TypesZ.LBRACKET)
+                node = ast_z.SubscriptNode(
+                    var=node,
+                    idx=self.ternary_statement()
+                )
+                self.eat(TypesZ.RBRACKET)
         return node
 
     def func(self):
-        pass
-
+        func = self.current_token.value
+        args = []
+        self.eat(TypesZ.FUNC)
+        self.eat(TypesZ.LPAREN)
+        if self.current_token != TypesZ.RPAREN:
+            while True:
+                args.append(self.ternary_statement())
+                if self.current_token != TypesZ.COMMA:
+                    break
+                self.eat(TypesZ.COMMA)
+        self.eat(TypesZ.RPAREN)
+        return ast_z.FuncNode(
+            func=func,
+            args=args
+        )
+    
     def factor(self):
         node = None
         if self.current_token == TypesZ.INTEGER:
@@ -227,7 +252,6 @@ class ParserZ:
             node = self.var()
         elif self.current_token == TypesZ.FUNC:
             node = self.func()
-            self.eat(TypesZ.FUNC)
         return node
 
     def parse(self):
