@@ -1,5 +1,6 @@
 import unittest
 
+from lib import render
 from lib.interpret_z import InterpreterZ
 from lib.parse_z import ParserZ
 from lib.scan_z import ScannerZ
@@ -280,6 +281,20 @@ class ParserTestCase(unittest.TestCase):
         iz = InterpreterZ(pz.parse(), context)
         self.assertEqual(
             result, iz.interpret()
+        )
+
+    def test_render(self):
+        result = render(
+            '<div>{st_product.title}</div>',
+            {
+                'st_product': {
+                    'title': 'Nice Chair'
+                }
+            }
+        )
+        self.assertEqual(
+            result,
+            '<div>Nice Chair</div>'
         )
 
 

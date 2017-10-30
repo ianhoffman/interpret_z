@@ -1,4 +1,4 @@
-# INTERPRET Z
+# Interpret Z
 This is an interpreter for Sailthru's Zephyr scripting language. I'd gotten fed
 up about posting every template to Sailthru in order to check if my code
 rendered a context correctly, so I build this. A heavy debt of gratitude and 
@@ -6,7 +6,7 @@ inspiration is owed to Ruslan Spivak, whose article series 'Let's build a
 simple interpreter' provided the basis for this program. You can read the 
 series [here](https://ruslanspivak.com/lsbasi-part1/), if interested.
 
-## KNOWN ISSUES:
+## Known Issues
 1. Python and Zephyr treat the following expressions differently:
 
 ```python
