@@ -148,4 +148,5 @@ class InterpreterZ(NodeVisitor):
 
     def interpret(self):
         return self.visit(self.ast)
+
         

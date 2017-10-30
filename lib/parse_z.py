@@ -12,7 +12,7 @@ class ParserZ:
     def eat(self, token):
         if self.current_token != token:
             raise Exception('Expected type {}, got type {}'.format(
-                token.name, self.current_token)
+                token.name, self.current_token.z_type)
             )
         else:
             self.pos += 1
@@ -27,6 +27,21 @@ class ParserZ:
             return None
         else:
             return self.tokens[peek_pos]
+
+    def parse(self):
+        self.tokens = self.sz.scan()
+        if len(self.tokens) >= 1:
+            self.current_token = self.tokens[0]
+        else:
+            raise Exception('No tokens scanned')
+
+        tree = self.compound()
+        if self.current_token is not None:
+            raise Exception(
+                'After parsing, current_token should be None, '
+                'instead got %s.' % self.current_token.z_type
+            )
+        return tree
 
     def compound(self):
         children = []
@@ -88,17 +103,6 @@ class ParserZ:
             name=token.value,
             value=value
         )
-
-    def array(self):
-        arr = []
-        self.eat(TypesZ.LBRACKET)
-        if self.current_token != TypesZ.RBRACKET:
-            arr.append(self.ternary_statement())
-            while self.current_token == TypesZ.COMMA:
-                self.eat(TypesZ.COMMA)
-                arr.append(self.ternary_statement())
-        self.eat(TypesZ.RBRACKET)
-        return ast_z.ArrayNode(arr=arr)
 
     def if_statement(self):
         self.eat(ReservedKeywords.IF)
@@ -198,6 +202,32 @@ class ParserZ:
             )
         return node
 
+    def factor(self):
+        node = None
+        if self.current_token == TypesZ.INTEGER:
+            node = ast_z.IntegerNode(self.current_token)
+            self.eat(TypesZ.INTEGER)
+        elif self.current_token == TypesZ.REAL:
+            node = ast_z.RealNode(self.current_token)
+            self.eat(TypesZ.REAL)
+        elif self.current_token == TypesZ.LPAREN:
+            self.eat(TypesZ.LPAREN)
+            node = self.ternary_statement()
+            self.eat(TypesZ.RPAREN)
+        elif self.current_token == TypesZ.BANG:
+            self.eat(TypesZ.BANG)
+            node = ast_z.BangNode(
+                self.boolean()
+            )
+        elif self.current_token == TypesZ.STRING:
+            node = ast_z.StringNode(self.current_token)
+            self.eat(TypesZ.STRING)
+        elif self.current_token == TypesZ.VAR:
+            node = self.var()
+        elif self.current_token == TypesZ.FUNC:
+            node = self.func()
+        return node
+
     def var(self):
         node = ast_z.VarNode(name=self.current_token.value)
         self.eat(TypesZ.VAR)
@@ -237,44 +267,14 @@ class ParserZ:
             args=args
         )
     
-    def factor(self):
-        node = None
-        if self.current_token == TypesZ.INTEGER:
-            node = ast_z.IntegerNode(self.current_token)
-            self.eat(TypesZ.INTEGER)
-        elif self.current_token == TypesZ.REAL:
-            node = ast_z.RealNode(self.current_token)
-            self.eat(TypesZ.REAL)
-        elif self.current_token == TypesZ.LPAREN:
-            self.eat(TypesZ.LPAREN)
-            node = self.ternary_statement()
-            self.eat(TypesZ.RPAREN)
-        elif self.current_token == TypesZ.BANG:
-            self.eat(TypesZ.BANG)
-            node = ast_z.BangNode(
-                self.boolean()
-            )
-        elif self.current_token == TypesZ.STRING:
-            node = ast_z.StringNode(self.current_token)
-            self.eat(TypesZ.STRING)
-        elif self.current_token == TypesZ.VAR:
-            node = self.var()
-        elif self.current_token == TypesZ.FUNC:
-            node = self.func()
-        return node
-
-    def parse(self):
-        self.tokens = self.sz.scan()
-        if len(self.tokens) >= 1:
-            self.current_token = self.tokens[0]
-        else:
-            raise Exception('No tokens scanned')
-
-        tree = self.compound()
-        if self.current_token is not None:
-            raise Exception(
-                'After parsing, current_token should be None, '
-                'instead got %s.' % self.current_token.z_type
-            )
-        return tree
+    def array(self):
+        arr = []
+        self.eat(TypesZ.LBRACKET)
+        if self.current_token != TypesZ.RBRACKET:
+            arr.append(self.ternary_statement())
+            while self.current_token == TypesZ.COMMA:
+                self.eat(TypesZ.COMMA)
+                arr.append(self.ternary_statement())
+        self.eat(TypesZ.RBRACKET)
+        return ast_z.ArrayNode(arr=arr)
 
