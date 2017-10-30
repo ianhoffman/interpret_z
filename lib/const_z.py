@@ -1,19 +1,15 @@
 from enum import Enum
+from urllib.parse import quote
 
 from lib.token_z import TokenZ
 
 
-def replace(full_str, to_replace, replacement):
-    return full_str.replace(to_replace, replacement)
-
-def number(num, places=0):
-    import pdb; pdb.set_trace()
-    return ('{:.%sf}' % places).format(num) 
-
-
 ZephyrFuncs = {
-    'number': number,
-    'replace': replace 
+    'length': lambda t: len(t),
+    'number': lambda n, places=0: ('{:.%sf}' % places).format(n),
+    'replace': lambda s, old, new: s.replace(old, new),
+    'substr': lambda string, start, end: string[start:end],
+    'u': lambda text: quote(text)
 }
 
 
@@ -37,6 +33,7 @@ class TypesZ(Enum):
     LT = 'LT'
     LTE = 'LTE'
     MINUS = 'MINUS'
+    MOD = 'MOD'
     MUL = 'MUL'
     NEQ = 'NEQ'
     OR = 'OR'

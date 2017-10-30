@@ -21,7 +21,7 @@ class ParserTestCase(unittest.TestCase):
                 expected = expected.lower()
             self.assertEqual(
                 self._get_interpreted_result(wrapped, context),
-                str(expected)
+                expected
             )
 
     def test_binary_operators(self):
@@ -203,9 +203,85 @@ class ParserTestCase(unittest.TestCase):
         self._assert_all_equal(
             (
                 ("replace('hi there', 'hi', 'hello')", 'hello there'),
-                # ('number(12, 2)', 12.00)
-            )
+                ('number(12, 2)', '12.00'), # Str to preserve decimals
+                ('number(12)', '12'),
+                (
+                    'u(\'random+param=random&another=123\')', 
+                    'random%2Bparam%3Drandom%26another%3D123'
+                ),
+                (
+                    'replace(replace(url_stub, profile.vars.is_confirmed ? '
+                    '\'/replace/me\' : u(\'/replace/me\'), ' 
+                    'profile.vars.is_confirmed ? \'/collection/decor\' : '
+                    'u(\'/collection/decor\')), \'tkadditionalparamstk\', ' 
+                    'profile.vars.is_confirmed ? \'guid=12345\' : ' 
+                    '\'guid%3D12345\')', 
+                    '/collection/decor?guid=12345'
+                )
+            ),
+            context={
+                'url_stub': '/replace/me?tkadditionalparamstk',
+                'profile': {
+                    'vars': {
+                        'is_confirmed': True
+                    }
+                }
+            }
         )
+
+    def test_with_html(self):
+        template = '<div class="product-grid">' \
+                   '<ol>' \
+                   '<li>' \
+                   '{st_product.id} - {st_product.name}' \
+                   '</li>' \
+                   '</ol>' \
+                   '<ol>' \
+                   '{foreach st_related_products as s_rp}' \
+                   '<li>{s_rp.id} - {s_rp.name}</li>' \
+                   '{/foreach}' \
+                   '</ol>' \
+                   '</div>'
+        result = '<div class="product-grid">' \
+                 '<ol>' \
+                 '<li>' \
+                 '1 - Nice Chair' \
+                 '</li>' \
+                 '</ol>' \
+                 '<ol>' \
+                 '<li>2 - Chair Two</li>' \
+                 '<li>3 - Chair Three</li>' \
+                 '<li>4 - Chair Four</li>' \
+                 '</ol>' \
+                 '</div>'
+        context = {
+            'st_product': {
+                'id': 1,
+                'name': 'Nice Chair'
+            },
+            'st_related_products': [
+                {
+                    'id': 2,
+                    'name': 'Chair Two'
+                },
+                {
+                    'id': 3,
+                    'name': 'Chair Three'
+                },
+                {
+                    'id': 4,
+                    'name': 'Chair Four'
+                }
+            ]
+        }
+
+        sz = ScannerZ(template)
+        pz = ParserZ(sz)
+        iz = InterpreterZ(pz.parse(), context)
+        self.assertEqual(
+            result, iz.interpret()
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

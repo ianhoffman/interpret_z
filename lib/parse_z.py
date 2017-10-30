@@ -30,11 +30,20 @@ class ParserZ:
 
     def compound(self):
         children = []
-        while self.current_token == TypesZ.LBRACE and self.peek() not in (
-            ReservedKeywords.ENDFOR,
+        while self.current_token == TypesZ.HTML_OR_TEXT or (
+            self.current_token == TypesZ.LBRACE and
+            self.peek() != ReservedKeywords.ENDFOR
         ):
-            children.append(self.zephyr())
+            if self.current_token == TypesZ.LBRACE:
+                children.append(self.zephyr())
+            else:
+                children.append(self.html_or_text())
         return ast_z.CompoundNode(children=children)
+
+    def html_or_text(self):
+        value = self.current_token.value
+        self.eat(TypesZ.HTML_OR_TEXT)
+        return ast_z.HtmlTextNode(value=value)
     
     def zephyr(self):
         self.eat(TypesZ.LBRACE)

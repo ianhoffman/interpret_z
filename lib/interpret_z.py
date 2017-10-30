@@ -45,11 +45,15 @@ class InterpreterZ(NodeVisitor):
         if node.op == TypesZ.PLUS:
             if type(left_val) is str:
                 return left_val + str(self.visit(node.right)) 
-            return self.visit(node.left) + self.visit(node.right)
+            return left_val + self.visit(node.right)
         if node.op == TypesZ.MINUS:
             if type(left_val) is str:
                 return 0
-            return self.visit(node.left) - self.visit(node.right)
+            return left_val - self.visit(node.right)
+        if node.op == TypesZ.MOD:
+            if type(left_val) is str:
+                return 0
+            return left_val - self.visit(node.right)
         raise NotImplemented('op %s not implemented' % node.op)
 
     def visit_BoolOpNode(self, node):
@@ -132,6 +136,9 @@ class InterpreterZ(NodeVisitor):
             return self.visit(node.if_true)
         else:
             return self.visit(node.if_false)
+
+    def visit_HtmlTextNode(self, node):
+        return node.value
 
     def visit_VarNode(self, node):
         value = self.context.get(node.name)

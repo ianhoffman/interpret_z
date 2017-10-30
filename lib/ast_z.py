@@ -52,6 +52,10 @@ class FuncNode:
         self.func = func
         self.args = args
 
+class HtmlTextNode:
+    def __init__(self, value):
+        self.value = value
+
 class BoolStatementNode:
     def __init__(self, left, op, right):
         self.left = left
