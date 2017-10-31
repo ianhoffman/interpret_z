@@ -1,6 +1,6 @@
-from lib import ast_z
-from lib.const_z import ReservedKeywords
-from lib.const_z import TypesZ
+from interpret_z import ast_z
+from interpret_z import ReservedKeywords
+from interpret_z.const_z import TypesZ
 
 class ParserZ:
     def __init__(self, sz):

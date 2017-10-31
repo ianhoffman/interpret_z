@@ -1,0 +1,22 @@
+Metadata-Version: 1.2
+Name: interpret-z
+Version: 0.1.0
+Summary: A lightweight compiler for Sailthru's Zephyr scripting language
+Home-page: https://github.com/ianhoffman/interpret_z
+Author: Ian Hoffman
+Author-email: ianhoffman10@gmail.com
+License: MIT
+Download-URL: https://github.com/ianhoffman/interpret_z/archive/0.1.1.tar.gz
+Description: UNKNOWN
+Keywords: zephyr,sailthru,compiler,interpreter,parser,scanner
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: 
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=3

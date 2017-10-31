@@ -1,7 +1,7 @@
-from lib.const_z import ReservedKeywords
-from lib.const_z import TypesZ
-from lib.const_z import ZephyrFuncs
-from lib.token_z import TokenZ
+from interpret_z import ReservedKeywords
+from interpret_z import TypesZ
+from interpret_z import ZephyrFuncs
+from interpret_z import TokenZ
 
 
 class ScannerZ:

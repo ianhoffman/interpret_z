@@ -1,8 +1,8 @@
 import unittest
 
-from lib.const_z import TypesZ
-from lib.scan_z import ScannerZ
-from lib.token_z import TokenZ
+from interpret_z.const_z import TypesZ
+from interpret_z.scan_z import ScannerZ
+from interpret_z.token_z import TokenZ
 
 
 class TokenZTestCase(unittest.TestCase):

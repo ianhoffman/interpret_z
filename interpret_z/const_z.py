@@ -1,7 +1,7 @@
 from enum import Enum
 from urllib.parse import quote
 
-from lib.token_z import TokenZ
+from interpret_z import TokenZ
 
 
 ZephyrFuncs = {

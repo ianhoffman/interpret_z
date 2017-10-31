@@ -1,6 +1,6 @@
-from lib import ast_z
-from lib.const_z import ZephyrFuncs
-from lib.const_z import TypesZ
+from interpret_z import ast_z
+from interpret_z import ZephyrFuncs
+from interpret_z import TypesZ
 
 class NodeVisitor:
     def visit(self, node):
@@ -148,5 +148,3 @@ class InterpreterZ(NodeVisitor):
 
     def interpret(self):
         return self.visit(self.ast)
-
-        

@@ -1,9 +1,9 @@
 import unittest
 
-from lib import render
-from lib.interpret_z import InterpreterZ
-from lib.parse_z import ParserZ
-from lib.scan_z import ScannerZ
+from interpret_z import render
+from interpret_z import InterpreterZ
+from interpret_z import ParserZ
+from interpret_z.scan_z import ScannerZ
 
 
 class ParserTestCase(unittest.TestCase):
