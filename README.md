@@ -21,9 +21,10 @@ the given HTML.
 
 ## Improvements
 I've only implemented the bare minimum of Sailthru functions necessary to get
-this project up and running. For the rest, we raise a `NotImplemented`
-exception (for now). Long term, if you want access to these functions in 
-Interpret Z, make a pull request.
+this project up and running. For the rest, we don't even raise a
+`NotImplemented` exception at the moment, so you'll be warned that a var is
+referenced before initialization. I welcome any and all pull requests to add
+more Zephyr functions.
 
 ## Known Issues
 1. Python and Zephyr treat the following expressions differently:
