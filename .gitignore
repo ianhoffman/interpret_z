@@ -4,3 +4,7 @@ __pycache__
 dist/*
 build/*
 interpret_z.egg-info
+
+# The following are proprietary files and tests that reference them
+offer_counter_to_buyer.*
+test_integration.*
