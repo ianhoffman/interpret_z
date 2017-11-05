@@ -201,6 +201,13 @@ class InterpreterTestCase(unittest.TestCase):
         )
 
     def test_functions(self):
+        fn_string = 'replace(replace(url_stub, profile.vars.is_confirmed ? ' \
+                    '\'/replace/me\' : u(\'/replace/me\'), ' \
+                    'profile.vars.is_confirmed ? \'/collection/decor\' : ' \
+                    'u(\'/collection/decor\')), \'tkadditionalparamstk\', ' \
+                    'profile.vars.is_confirmed ? \'guid=12345\' : ' \
+                    '\'guid%3D12345\')'
+
         self._assert_all_equal(
             (
                 ("replace('hi there', 'hi', 'hello')", 'hello there'),
@@ -211,12 +218,7 @@ class InterpreterTestCase(unittest.TestCase):
                     'random%2Bparam%3Drandom%26another%3D123'
                 ),
                 (
-                    'replace(replace(url_stub, profile.vars.is_confirmed ? '
-                    '\'/replace/me\' : u(\'/replace/me\'), ' 
-                    'profile.vars.is_confirmed ? \'/collection/decor\' : '
-                    'u(\'/collection/decor\')), \'tkadditionalparamstk\', ' 
-                    'profile.vars.is_confirmed ? \'guid=12345\' : ' 
-                    '\'guid%3D12345\')', 
+                    fn_string,
                     '/collection/decor?guid=12345'
                 )
             ),
@@ -225,6 +227,23 @@ class InterpreterTestCase(unittest.TestCase):
                 'profile': {
                     'vars': {
                         'is_confirmed': True
+                    }
+                }
+            }
+        )
+
+        self._assert_all_equal(
+            (
+                (
+                    fn_string,
+                    '%2Fcollection%2Fdecor%3Fguid%3D12345'
+                ),
+            ),
+            context={
+                'url_stub': '%2Freplace%2Fme%3Ftkadditionalparamstk',
+                'profile': {
+                    'vars': {
+                        'is_confirmed': False
                     }
                 }
             }

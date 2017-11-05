@@ -10,11 +10,10 @@ class FullIntegrationTestCase(unittest.TestCase):
         'profile': {
             'optout': False,
             'vars': {
-                'is_confirmed': False,
+                'is_confirmed': True,
                 'is_trade': True,
                 'unsubscribe_token': 'rand_val'
-            }
-        },
+            } },
         'should_show_unsubscribe': True,
         'st_offer': {
             'amount_off': 0,
@@ -63,7 +62,7 @@ class FullIntegrationTestCase(unittest.TestCase):
         ],
         'subject': 'whatever',
         'unsub_messaging_type_code': 'rand_val',
-        'url_stub': urllib.parse.quote('/replace/me?tkadditionalparamstk')
+        'url_stub': '/replace/me?tkadditionalparamstk'
     }
 
     def test_render_complex_template(self):
@@ -82,6 +81,12 @@ class FullIntegrationTestCase(unittest.TestCase):
             self.assertIn('$60', result)
             self.assertIn('$100', result)
             self.assertNotIn('/replace/me', result)
+
+            self.context['profile']['vars']['is_confirmed'] = False
+            self.context['url_stub'] = urllib.parse.quote_plus(self.context['url_stub'])
+            result = render(html_content, self.context)
+            self.assertNotIn('%2Freplace%2Fme', result)
+            self.assertIn('%2Fcollection%2F', result)
 
 
 if __name__ == '__main__':

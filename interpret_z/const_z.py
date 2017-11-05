@@ -1,5 +1,5 @@
 from enum import Enum
-from urllib.parse import quote
+from urllib.parse import quote_plus 
 
 from interpret_z import TokenZ
 
@@ -17,7 +17,7 @@ ZephyrFuncs = {
     'number': lambda n, places=0: ('{:.%sf}' % places).format(n),
     'replace': replace,
     'substr': lambda string, start, end: string[start:end],
-    'u': lambda text: quote(text)
+    'u': lambda text: quote_plus(text)
 }
 
 
