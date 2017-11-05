@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='interpret_z',
     packages=['interpret_z'],
-    version='0.0.2',
+    version='0.0.3',
     description='A lightweight compiler for Sailthru\'s Zephyr scripting language',
     author='Ian Hoffman',
     author_email='ianhoffman10@gmail.com',
