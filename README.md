@@ -6,6 +6,25 @@ inspiration is owed to Ruslan Spivak, whose article series 'Let's build a
 simple interpreter' provided the basis for this program. You can read the 
 series [here](https://ruslanspivak.com/lsbasi-part1/), if interested.
 
+## Usage
+Interpret Z exposes one function, `render`, which takes `.txt` or `.html`
+content and a context dict, and renders that dict into the given content, as
+follows: 
+
+```python
+html_content = interpret_z.render(some_html_template_content, context_dict)
+```
+
+where `some_html_template_context` is an (unrendered) string containing
+sailthru vars, and `context_dict` is a dictionary of vars to be rendered into
+the given HTML.
+
+## Improvements
+I've only implemented the bare minimum of Sailthru functions necessary to get
+this project up and running. For the rest, we raise a `NotImplemented`
+exception (for now). Long term, if you want access to these functions in 
+Interpret Z, make a pull request.
+
 ## Known Issues
 1. Python and Zephyr treat the following expressions differently:
 

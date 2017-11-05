@@ -116,8 +116,10 @@ class InterpreterZ(NodeVisitor):
     def visit_IfNode(self, node):
         if self.visit(node.condition):
             return self.visit(node.if_true)
-        else:
+        elif node.if_false:
             return self.visit(node.if_false)
+        else:
+            return None
 
     def visit_IntegerNode(self, node):
         return node.value

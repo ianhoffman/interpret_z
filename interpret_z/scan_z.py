@@ -17,6 +17,7 @@ class ScannerZ:
         '+': TokenZ(TypesZ.PLUS, '+'),
         '-': TokenZ(TypesZ.MINUS, '-'),
         '*': TokenZ(TypesZ.MUL, '*'),
+        '%': TokenZ(TypesZ.MOD, '%'),
         '/': 'id_div',
         '<': 'id_lt',
         '>': 'id_gt',
@@ -199,7 +200,8 @@ class ScannerZ:
             self.advance()
             return result
         else:
-            raise Exception('Invalid character')
+            import pdb; pdb.set_trace()
+            raise Exception('Invalid character: %s' % self.current_char)
 
     def scan(self):
         tokens = []

@@ -4,10 +4,18 @@ from urllib.parse import quote
 from interpret_z import TokenZ
 
 
+def replace(s, old, new):
+    if not isinstance(old, str):
+        old = str(old)
+    if not isinstance(new, str):
+        new = str(new)
+    return s.replace(old, new)
+
+
 ZephyrFuncs = {
     'length': lambda t: len(t),
     'number': lambda n, places=0: ('{:.%sf}' % places).format(n),
-    'replace': lambda s, old, new: s.replace(old, new),
+    'replace': replace,
     'substr': lambda string, start, end: string[start:end],
     'u': lambda text: quote(text)
 }

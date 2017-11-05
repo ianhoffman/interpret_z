@@ -47,7 +47,11 @@ class ParserZ:
         children = []
         while self.current_token == TypesZ.HTML_OR_TEXT or (
             self.current_token == TypesZ.LBRACE and
-            self.peek() != ReservedKeywords.ENDFOR
+            self.peek() not in (
+                ReservedKeywords.ENDFOR,
+                ReservedKeywords.ENDIF,
+                ReservedKeywords.ELSE
+            )
         ):
             if self.current_token == TypesZ.LBRACE:
                 children.append(self.zephyr())
@@ -108,16 +112,19 @@ class ParserZ:
         self.eat(ReservedKeywords.IF)
         condition = self.ternary_statement()
         self.eat(TypesZ.RBRACE)
-        if_true = self.zephyr()
+        if_true = self.compound()
         self.eat(TypesZ.LBRACE)
+        if_false = None
         
         if self.current_token == ReservedKeywords.ELSE:
             self.eat(ReservedKeywords.ELSE)
         if self.current_token == ReservedKeywords.IF:
             if_false = self.if_statement()
+        elif self.current_token == ReservedKeywords.ENDIF:
+            self.eat(ReservedKeywords.ENDIF)
         else:
             self.eat(TypesZ.RBRACE)
-            if_false = self.zephyr()
+            if_false = self.compound()
             self.eat(TypesZ.LBRACE)
             self.eat(ReservedKeywords.ENDIF)
 
@@ -191,7 +198,7 @@ class ParserZ:
     def term(self):
         node = self.factor()
         while self.current_token.z_type in (
-            TypesZ.MUL, TypesZ.DIV
+            TypesZ.MUL, TypesZ.DIV, TypesZ.MOD
         ):
             op_type = self.current_token
             self.eat(op_type)

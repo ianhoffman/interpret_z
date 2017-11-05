@@ -6,7 +6,7 @@ from interpret_z import ParserZ
 from interpret_z.scan_z import ScannerZ
 
 
-class ParserTestCase(unittest.TestCase):
+class InterpreterTestCase(unittest.TestCase):
     def _get_interpreted_result(self, text, context):
         context = context or {}
         pz = ParserZ(ScannerZ(text))
@@ -283,20 +283,7 @@ class ParserTestCase(unittest.TestCase):
             result, iz.interpret()
         )
 
-    def test_render(self):
-        result = render(
-            '<div>{st_product.title}</div>',
-            {
-                'st_product': {
-                    'title': 'Nice Chair'
-                }
-            }
-        )
-        self.assertEqual(
-            result,
-            '<div>Nice Chair</div>'
-        )
-
+    
 
 if __name__ == '__main__':
     unittest.main()
